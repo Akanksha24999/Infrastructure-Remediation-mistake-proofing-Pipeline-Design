@@ -10,10 +10,10 @@ resource "random_id" "bucket_suffix" {
 }
 
 resource "google_storage_bucket" "d0_raw_landing" {
-  name                     = "habot-${var.environment}-d0-raw-landing-${random_id.bucket_suffix.hex}"
-  location                 = var.gcp_region
-  force_destroy            = false # Prevent accidental deletion of raw student data
-  storage_class            = "STANDARD"
+  name          = "habot-${var.environment}-d0-raw-landing-${random_id.bucket_suffix.hex}"
+  location      = var.gcp_region
+  force_destroy = false # Prevent accidental deletion of raw student data
+  storage_class = "STANDARD"
 
   # Security Control 1: Enforce Uniform Bucket-Level Access (No public ACLs)
   uniform_bucket_level_access = true
