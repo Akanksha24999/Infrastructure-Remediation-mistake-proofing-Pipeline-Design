@@ -1,0 +1,8 @@
+# Example Terraform Variable Override Values
+# Copy this file to 'terraform.tfvars' and set your real GCP Project ID
+
+gcp_project_id      = "your-actual-gcp-project-id"
+gcp_region          = "us-central1"
+gcp_zone            = "us-central1-a"
+environment         = "staging"
+data_retention_days = 90

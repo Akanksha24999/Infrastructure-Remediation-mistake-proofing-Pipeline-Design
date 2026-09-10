@@ -1,0 +1,76 @@
+name: Poka-Yoke Automated CI/CD Build Gate (Fail-Closed)
+
+# ==============================================================================
+# HabotConnect CI/CD Build Gate
+# Task 2: Poka-Yoke Automated Secret Scanner & Lint Build Gate
+# ==============================================================================
+# Rule: FAIL-CLOSED. If any hardcoded API key, private key, or code formatting
+# violation is detected, this pipeline immediately terminates with exit 1.
+# ==============================================================================
+
+on:
+  push:
+    branches: [ "main", "staging", "develop" ]
+  pull_request:
+    branches: [ "main", "staging" ]
+
+jobs:
+  poka_yoke_security_gate:
+    name: Security & Code Integrity Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python Environment
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install Linting & Security Inspection Tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 black detect-secrets
+
+      - name: "Gate 1: Poka-Yoke Hardcoded Secret & Credential Detection"
+        run: |
+          echo "Scanning codebase for unencrypted API keys and credentials..."
+          
+          # Regex patterns for GCP keys, AWS keys, RSA private keys, generic API tokens
+          SECRET_PATTERNS='(AIzaSy[0-9A-Za-z_-]{35}|AKIA[0-9A-Z]{16}|-----BEGIN PRIVATE KEY-----|secret_key\s*=\s*["'\''"][A-Za-z0-9/\+=]{10,}["'\''"]|api_key\s*=\s*["'\''"][A-Za-z0-9_\-]{16,}["'\''"])'
+
+          # Scan codebase ignoring git directory and markdown documentation
+          FOUND_SECRETS=$(grep -Ern --exclude-dir=".git" --exclude-dir="docs" --exclude="*.md" "$SECRET_PATTERNS" . || true)
+
+          if [ -n "$FOUND_SECRETS" ]; then
+            echo "================================================================="
+            echo "CRITICAL SECURITY VIOLATION DETECTED! (POKA-YOKE FAIL-CLOSED)"
+            echo "Hardcoded secret keys or unencrypted credentials found in code:"
+            echo "$FOUND_SECRETS"
+            echo "================================================================="
+            echo "Pipeline halted to protect infrastructure and data integrity."
+            exit 1
+          else
+            echo "SUCCESS: No hardcoded secrets or unencrypted keys detected."
+          fi
+
+      - name: "Gate 2: Python Code Format & Style Enforcement (Flake8)"
+        run: |
+          echo "Running flake8 linter checks..."
+          # Stop the build if there are Python syntax errors or undefined names
+          flake8 backend/ --count --select=E9,F63,F7,F82 --show-source --statistics
+          # Enforce line length and structural discipline
+          flake8 backend/ --count --max-complexity=10 --max-line-length=120 --statistics
+
+      - name: "Gate 3: Infrastructure-as-Code (Terraform) Syntax Validation"
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0
+
+      - name: Validate Terraform Files
+        run: |
+          cd terraform
+          terraform init -backend=false
+          terraform fmt -check
+          terraform validate

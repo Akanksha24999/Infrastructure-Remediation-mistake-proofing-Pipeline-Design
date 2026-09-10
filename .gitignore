@@ -1,0 +1,60 @@
+# ==============================================================================
+# HabotConnect Project .gitignore
+# ==============================================================================
+
+# Documentation (Saved locally only - Excluded from Git push)
+docs/
+
+# Python & Django Ignored Files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+venv/
+env/
+ENV/
+.venv/
+
+# Django Database & Local Settings
+*.sqlite3
+*.db
+local_settings.py
+.env
+
+# Terraform Local Cache & State Files
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+terraform.tfvars
+
+# IDE & OS Junk
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
