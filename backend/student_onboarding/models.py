@@ -1,6 +1,7 @@
 import uuid
 from django.db import models
 
+
 class StudentOnboarding(models.Model):
     """
     Student Onboarding Model.
@@ -10,7 +11,7 @@ class StudentOnboarding(models.Model):
     student_name = models.CharField(max_length=150)
     age = models.IntegerField(help_text="Student age (Must be 3 to 18)")
     evaluation_score = models.FloatField(help_text="Diagnostic assessment score (0.0 to 100.0)")
-    
+
     # Raw parent consent input
     parent_consent_given = models.BooleanField(default=False)
     guardian_email = models.EmailField()

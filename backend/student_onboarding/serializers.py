@@ -9,6 +9,7 @@
 from rest_framework import serializers
 from .models import StudentOnboarding
 
+
 class StudentOnboardingSerializer(serializers.ModelSerializer):
     """
     Serializer enforcing exact boundary validations and generating DCYN binary logic flags.
@@ -64,7 +65,7 @@ class StudentOnboardingSerializer(serializers.ModelSerializer):
         ------------------------------------------------------------------
         - DCYN Flag 1 (Parent Consent): 1 if consent_given is True, else 0.
         - DCYN Flag 2 (Requires LSA Support): 1 if score < 70.0, else 0.
-        - DCYN Flag 3 (Program Eligibility): 1 if age is valid (3-18) AND consent is True, else 0.
+        - DCYN Flag 3 (Program Eligibility): 1 if age is valid AND consent is True, else 0.
         """
         age = attrs.get('age')
         score = attrs.get('evaluation_score')

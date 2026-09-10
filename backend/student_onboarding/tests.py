@@ -3,6 +3,7 @@ from rest_framework.test import APIClient
 from rest_framework import status
 from .serializers import StudentOnboardingSerializer
 
+
 class DCYNSerializerTest(TestCase):
     def setUp(self):
         self.client = APIClient()
@@ -19,7 +20,7 @@ class DCYNSerializerTest(TestCase):
         serializer = StudentOnboardingSerializer(data=payload)
         self.assertTrue(serializer.is_valid(), serializer.errors)
         data = serializer.validated_data
-        
+
         self.assertEqual(data['dcyn_has_parent_consent'], 1)
         self.assertEqual(data['dcyn_requires_lsa_support'], 1)
         self.assertEqual(data['dcyn_is_eligible_for_program'], 1)

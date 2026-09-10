@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from .models import StudentOnboarding
 from .serializers import StudentOnboardingSerializer
 
+
 class StudentOnboardingIngestView(APIView):
     """
     API Endpoint for ingesting raw student onboarding JSON payloads.
@@ -29,7 +30,7 @@ class StudentOnboardingIngestView(APIView):
                 "message": "Student onboarding payload validated and DCYN binary flags generated.",
                 "data": serializer.data
             }, status=status.HTTP_201_CREATED)
-        
+
         return Response({
             "status": "error",
             "errors": serializer.errors

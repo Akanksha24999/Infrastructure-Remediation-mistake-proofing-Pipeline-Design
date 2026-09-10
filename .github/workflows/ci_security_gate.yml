@@ -59,9 +59,9 @@ jobs:
         run: |
           echo "Running flake8 linter checks..."
           # Stop the build if there are Python syntax errors or undefined names
-          flake8 backend/ --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 backend/ --exclude=backend/venv,backend/student_onboarding/migrations --count --select=E9,F63,F7,F82 --show-source --statistics
           # Enforce line length and structural discipline
-          flake8 backend/ --count --max-complexity=10 --max-line-length=120 --statistics
+          flake8 backend/ --exclude=backend/venv,backend/student_onboarding/migrations --count --max-complexity=10 --max-line-length=120 --statistics
 
       - name: "Gate 3: Infrastructure-as-Code (Terraform) Syntax Validation"
         uses: hashicorp/setup-terraform@v2
