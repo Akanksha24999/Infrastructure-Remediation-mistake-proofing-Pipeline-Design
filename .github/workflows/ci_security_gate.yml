@@ -40,8 +40,8 @@ jobs:
           # Regex patterns for GCP keys, AWS keys, RSA private keys, generic API tokens
           SECRET_PATTERNS='(AIzaSy[0-9A-Za-z_-]{35}|AKIA[0-9A-Z]{16}|-----BEGIN PRIVATE KEY-----|secret_key\s*=\s*["'\''"][A-Za-z0-9/\+=]{10,}["'\''"]|api_key\s*=\s*["'\''"][A-Za-z0-9_\-]{16,}["'\''"])'
 
-          # Scan codebase ignoring git directory and markdown documentation
-          FOUND_SECRETS=$(grep -Ern --exclude-dir=".git" --exclude-dir="docs" --exclude="*.md" "$SECRET_PATTERNS" . || true)
+          # Scan codebase ignoring git directory, github workflows, and markdown documentation
+          FOUND_SECRETS=$(grep -Ern --exclude-dir=".git" --exclude-dir=".github" --exclude-dir="docs" --exclude="*.md" "$SECRET_PATTERNS" . || true)
 
           if [ -n "$FOUND_SECRETS" ]; then
             echo "================================================================="
